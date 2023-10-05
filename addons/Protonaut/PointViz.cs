@@ -12,7 +12,7 @@ namespace Protonaut.addons.Protonaut
         private Material material = new StandardMaterial3D();
         protected Material BackMaterial = new StandardMaterial3D();
         private Transform3D objectTransform;
-        private const float POINT_SIZE = 1.1f;
+        private const float POINT_SIZE = 1.25f;
         private const float SQRT_PT_SIZE = POINT_SIZE * 0.70711f;
 
         protected PointViz() : base()
@@ -25,7 +25,6 @@ namespace Protonaut.addons.Protonaut
             //var retVar = new PointViz(x, y, z);
             retVar.position = new Vector3(x, y, z);
 
-            GD.Print("Hi 2");
             InitializeMesh(retVar);
 
 
@@ -42,18 +41,16 @@ namespace Protonaut.addons.Protonaut
             float baseY = ptv.position.Y - POINT_SIZE;
             var mesh = new ArrayMesh();
 
-            GD.Print("1");
             // Define vertices and indices to form a pyramid
             Vector3[] vertices = new Vector3[4];
             vertices[0] = new Vector3(ptv.position.X, ptv.position.Y, ptv.position.Z);
             vertices[1] = new Vector3(ptv.position.X,
                 baseY, ptv.position.Z + POINT_SIZE);
             vertices[2] = new Vector3(ptv.position.X+SQRT_PT_SIZE, 
-                baseY, ptv.position.Y - SQRT_PT_SIZE);
+                baseY, ptv.position.Z - SQRT_PT_SIZE);
             vertices[3] = new Vector3(ptv.position.X - SQRT_PT_SIZE,
-                baseY, ptv.position.Y - SQRT_PT_SIZE);
+                baseY, ptv.position.Z - SQRT_PT_SIZE);
 
-            GD.Print("1");
             SurfaceTool surfaceTool = new SurfaceTool();
             surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
 

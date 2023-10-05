@@ -9,7 +9,7 @@ namespace Protonaut.addons.Protonaut
     [Tool]
     public partial class Protonaut : EditorPlugin
     {
-        private List<PointViz> primitiveObjects = new List<PointViz>();
+        private List<PointViz> pointMeshes = new List<PointViz>();
 
         private VBoxContainer dock;
         private HBoxContainer MenuBar { get; set; }
@@ -21,7 +21,7 @@ namespace Protonaut.addons.Protonaut
 
         private void DbgPrint(string s)
         {
-            bool printDebug = true;
+            bool printDebug = false;
             if(printDebug) 
             {
                 GD.Print(s);
@@ -85,16 +85,14 @@ namespace Protonaut.addons.Protonaut
             }
         }
 
-        private void CreateManyPoints(int numberOfPoints = 5000)
+        private void CreateManyPoints(int numberOfPoints = 20)
         {
             DbgPrint("Entered CreateManyPointses.");
+            int numPts = numberOfPoints;
+            if(numPts == 0) { numPts = 50; }
             EditorInterface editorInterface = GetEditorInterface();
             Node editedSceneRoot = editorInterface.GetEditedSceneRoot();
 
-            GD.Print("Hi.");
-            var newPt = PointViz.PointVizFactory(editedSceneRoot, 0f, 0f, 0f);
-            var newPtParent = newPt.GetParent();
-            return;
             double radius = 100.0;
             double thickness = 5.0;
 
@@ -102,10 +100,10 @@ namespace Protonaut.addons.Protonaut
             double radiusInstance = 0.0;
             double height = 0.0;
 
-            double x = 0.0; double y = 0.0; double z = 0.0;
+            float x = 0f; float y = 0f; float z = 0f;
 
             Random random = new Random();
-            for (int i = 0; i < numberOfPoints; i++)
+            for (int i = 0; i < numPts; i++)
             {
                 if(i % 100 == 0)
                     GD.Print($"i: {i}");
@@ -113,19 +111,14 @@ namespace Protonaut.addons.Protonaut
                 radiusInstance = Math.Sqrt(random.NextDouble()) * radius;
                 height = random.NextDouble() * 10.0;
 
-                x = radiusInstance * Math.Cos(angleRad);
-                z = radiusInstance * Math.Sin(angleRad);
-                y = height;
+                x = (float) (radiusInstance * Math.Cos(angleRad));
+                z = (float) (radiusInstance * Math.Sin(angleRad));
+                y = (float) height;
 
                 try
                 {
-                    //this.primitiveObjects.AddPrimitive(this.Scene,
-                    //    new PointVisual(new Point3D(x, y, z),
-                    //    new DiffuseMaterial(Brushes.Yellow),
-                    //    new DiffuseMaterial(Brushes.Red)));
-
-                    //lbl_speed.Content = $"{i++}";
-
+                    var newPt = PointViz.PointVizFactory(editedSceneRoot, x, y, z);
+                    pointMeshes.Add(newPt);
                 }
                 catch (Exception e)
                 {
