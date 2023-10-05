@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Protonaut.addons.Protonaut
 {
+    [Obsolete("Use PointViz instead.")]
     internal abstract class PrimitiveBase
     {
         protected Vector3 AnchorPt;

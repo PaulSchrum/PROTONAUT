@@ -9,7 +9,7 @@ namespace Protonaut.addons.Protonaut
     [Tool]
     public partial class Protonaut : EditorPlugin
     {
-        private List<PrimitiveBase> primitiveObjects = new List<PrimitiveBase>();
+        private List<PointViz> primitiveObjects = new List<PointViz>();
 
         private VBoxContainer dock;
         private HBoxContainer MenuBar { get; set; }
@@ -19,9 +19,19 @@ namespace Protonaut.addons.Protonaut
         private const int FILE_OPEN = 0;
         private const int FILE_CLOSE = 1;
 
+        private void DbgPrint(string s)
+        {
+            bool printDebug = true;
+            if(printDebug) 
+            {
+                GD.Print(s);
+            }
+        }
+
+
         public override void _EnterTree()
         {
-            GD.Print("Entered _EnterTree.");
+            DbgPrint("Entered _EnterTree.");
             dock = new VBoxContainer();
             dock.Name = "Protonaut";
             AddControlToDock(DockSlot.LeftUl, dock);
@@ -76,8 +86,15 @@ namespace Protonaut.addons.Protonaut
         }
 
         private void CreateManyPoints(int numberOfPoints = 5000)
-        { // start here: Create 5 points close to the origin.
-            GD.Print("Entered CreateManyPointses.");
+        {
+            DbgPrint("Entered CreateManyPointses.");
+            EditorInterface editorInterface = GetEditorInterface();
+            Node editedSceneRoot = editorInterface.GetEditedSceneRoot();
+
+            GD.Print("Hi.");
+            var newPt = PointViz.PointVizFactory(editedSceneRoot, 0f, 0f, 0f);
+            var newPtParent = newPt.GetParent();
+            return;
             double radius = 100.0;
             double thickness = 5.0;
 
@@ -117,7 +134,7 @@ namespace Protonaut.addons.Protonaut
                     break;
                 }
             }
-            GD.Print("Exited CreateManyPoints.");
+            DbgPrint("Exited CreateManyPoints.");
 
         }
     }
